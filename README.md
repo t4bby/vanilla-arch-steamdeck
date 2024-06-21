@@ -1,8 +1,9 @@
 # Vanila Arch Linux (KDE) on Steam Deck
-Because I do not like immutable OS and outdated packages. SteamOS already provides `nix` and `distrobox` but that is not enough for me, and installing other gaming distro contains too many bloatware for me. This contains configurations from different distro and mostly from Valve SteamOS.
+Because I do not like immutable OS and outdated packages. SteamOS already provides `nix` and `distrobox` but that is not enough for me, and installing other gaming distro contains too much bloatware for me. This contains configurations from different distro and mostly from Valve SteamOS. This contains a script that installs SteamOS packages to make your vanilla Arch Linux on Steam Deck installation SteamOS-like but preserves the non-immutable installation and Arch Linux repository.
 
 # Requirements
 - Linux Kernel Headers Installed (e.g. `linux-headers`)
+- Fresh (or not?) Arch Linux installation with KDE 
 
 # Installation
 ```
