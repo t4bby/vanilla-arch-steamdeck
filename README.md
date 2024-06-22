@@ -14,6 +14,27 @@ chmod +x install.sh
 ./install.sh
 ```
 
+# Post Installation
+## 1. Add this arguments on to your bootloader:
+```
+amd_iommu=off amdgpu.gttsize=8128 spi_amd.speed_dev=1 audit=0 fbcon=vc:2-6
+```
+
+### systemd-boot example for `linux-zen`:
+```
+title   Arch Linux (linux-zen)
+linux   /vmlinuz-linux-zen
+initrd  /amd-ucode.img
+initrd  /initramfs-linux-zen.img
+options root=PARTUUID=db8f7583-f5dc-477d-ab50-33524b90c731 zswap.enabled=0 rootflags=subvol=@ rw rootfstype=btrfs quiet amd_iommu=off amdgpu.gttsize=8128 spi_amd.speed_dev=1 audit=0 fbcon=vc:2-6
+```
+
+## 2. Install `jupiter-dkms` using `yay` for fan control in your kernel:
+```
+sudo pacman -S dkms
+yay -S jupiter-dkms
+```
+
 # References
 - https://gitlab.com/evlaV/jupiter-PKGBUILD
 - https://github.com/ublue-os/bazzite
