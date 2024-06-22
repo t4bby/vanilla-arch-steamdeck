@@ -1,0 +1,9 @@
+[Unit]
+Description="Portforward CEF remote debug port"
+
+[Service]
+ExecStart=/usr/bin/socat TCP4-LISTEN:8081,fork TCP4:127.0.0.1:8080
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

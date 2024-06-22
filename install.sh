@@ -33,25 +33,69 @@ pacman -Rcns amd-ucode linux-firmware
 echo "[+] Installing SteamOS packages"
 
 # Install base SteamOS packages, cherrypick only the nessesary packages
-pacman -Sy adobe-source-code-pro-fonts jupiter-main/noto-fonts \
-            jupiter-main/noto-fonts-cjk jupiter-main/steamdeck-dsp \
-            gamemode jupiter-main/gamescope jupiter-hw-support \
-            jupiter-legacy-support jupiter-main/powerbuttond \
-            steam-jupiter-stable steam-im-modules jupiter-main/upower \
-            jupiter-main/vpower jupiter-main/volume_key jupiter-hw-support \
-            linux-firmware-neptune linux-firmware-neptune-whence \
-            noise-suppression-for-voice
+echo "[+] Installing Font Requirements"
+pacman -Sy adobe-source-code-pro-fonts noto-fonts noto-fonts-cjk
+
+echo "[+] Installing Audio firmware"
+pacman -Sy jupiter-main/steamdeck-dsp alsa-ucm-conf noise-suppression-for-voice
+
+echo "[+] Installing Firmware"
+pacman -Sy  jupiter-main/jupiter-hw-support \
+            jupiter-main/upower jupiter-main/vpower \
+            jupiter-main/jupiter-hw-support \
+            jupiter-main/linux-firmware-neptune \
+            jupiter-main/amd-ucode \
+            jupiter-main/linux-firmware-neptune-whence
+
+echo "[+] Installing UI dependencies"
+pacman -Sy qt5-tools
+
+echo "[+] Installing Game Utilities"
+pacman -Sy jupiter-main/mangohud gamemode jupiter-main/gamescope jupiter-main/steam-im-modules jupiter-main/steam_notif_daemon jupiter-main/steam-jupiter-stable
+
+echo "[+] Installing bluetooth" 
+pacman -Sy bluez bluez-plugins bluez-utils 
 
 echo "[!] Done installing packages!"
 
-echo "[+] Copying SteamOS rootfs"
-echo "[*] Changing permissions"
+# Linking binaries
+ln -s /usr/bin/steamos-logger /usr/bin/steamos-info
+ln -s /usr/bin/steamos-logger /usr/bin/steamos-notice
+ln -s /usr/bin/steamos-logger /usr/bin/steamos-warning
+
+echo "[*] Adding audio workarounds"
+
+# Audio Workaround
+mkdir /usr/lib/firmware/cirrus/
+cp -R /usr/lib/firmware/cs35l41-*.bin /usr/lib/firmware/cirrus/
+rm /usr/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf
+
+echo "[*] Enabling Services"
+# Enabling Services
+systemctl enable bluetooth
+systemctl enable steamos-autologin
+systemctl enable wireplumber-workaround
+systemctl enable wireplumber-sysconf
+systemctl enable pipewire-workaround
+systemctl enable pipewire-sysconf
+systemctl --global enable steam-web-debug-portforward.service
+
+echo "[*] Disabling Conflict Services"
+systemctl disable vpower
+systemctl disable jupiter-biosupdate 
+systemctl disable jupiter-controller-update
+systemctl disable jupiter-fan-control
+
+echo "[+] Copying SteamOS configuration"
+echo "[*] Changing binary permissions"
 
 # Make binary in rootfs executable
 chmod +x ./rootfs/usr/bin/*
 
 # Copy configurations
 cp -R ./rootfs/* /
+cp ./rootfs/skel/Desktop/* $HOME/Desktop
+echo "[!] Done copying configurations"
 
-echo "[!] Done copying rootfs"
+echo "[!] Installation Completed"
 echo "[+] You can now reboot to see the changes"

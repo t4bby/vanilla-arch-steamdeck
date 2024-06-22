@@ -4,6 +4,7 @@ Because I do not like immutable OS and outdated packages. SteamOS already provid
 # Requirements
 - Linux Kernel Headers Installed (e.g. `linux-headers`)
 - Fresh (or not?) Arch Linux installation with KDE 
+- Steam Deck LCD (sorry, no `galileo` patches)
 
 # Installation
 ```
