@@ -35,6 +35,9 @@ sudo pacman -S dkms
 yay -S jupiter-dkms
 ```
 
+## 3. I dont like wayland
+Replace value of `DESKTOP_WAYLAND=true` to `DESKTOP_WAYLAND=false` in `/etc/default/desktop-wayland`
+
 # References
 - https://gitlab.com/evlaV/jupiter-PKGBUILD
 - https://github.com/ublue-os/bazzite

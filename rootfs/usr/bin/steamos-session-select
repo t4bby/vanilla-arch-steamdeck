@@ -4,6 +4,8 @@ set -e
 
 die() { echo >&2 "!! $*"; exit 1; }
 
+source /etc/default/desktop-wayland
+
 # File this script will modify, in addition to (potentially) the per-user sentinel file
 CONF_FILE="/etc/sddm.conf.d/zz-steamos-autologin.conf"
 
@@ -13,14 +15,22 @@ SENTINEL_FILE="steamos-session-select"
 CHECK_FILE="/etc/sddm.conf.d/steamos.conf"
 
 session="${1:-gamescope}"
-session_type="wayland"
+if ${DESKTOP_WAYLAND}; then
+  session_type="wayland"
+else
+  session_type="x11"
+fi
 
 session_launcher=""
 create_sentinel=""
 
 if [[ "$2" == "--sentinel-created" ]]; then
   SENTINEL_CREATED=1
-  session_type="wayland"
+  if ${DESKTOP_WAYLAND}; then
+      session_type="wayland"
+  else
+      session_type="x11"
+  fi
 fi
 
 # Update config sentinel
@@ -36,16 +46,14 @@ if [[ -z $SENTINEL_CREATED ]]; then
     if [[ -f "steamos-session-type" ]]; then
       cp steamos-session-type "$SENTINEL_FILE"
     else
-      echo "wayland" > "$SENTINEL_FILE"
+      if ${DESKTOP_WAYLAND}; then
+        echo "wayland" > "$SENTINEL_FILE"
+      else
+        echo "x11" > "$SENTINEL_FILE"
+      fi
     fi
     cat "$SENTINEL_FILE"
   )
-
-  if [[ ${BASE_IMAGE_NAME} == 'silverblue' ]]; then
-    # clear steam game desktop shortcut clutter
-    DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
-    grep --files-with-matches "Exec=steam steam://rungameid/" ${DATA_HOME}/applications/* | tr '\n' '\0' | xargs -0 -I {} rm {} || true
-  fi
 
   # If we were executed as a session user and then re-execute as root below, we don't want to set root's sentinel too
   export SENTINEL_CREATED=1

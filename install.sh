@@ -37,7 +37,7 @@ echo "[+] Installing Font Requirements"
 pacman -Sy --noconfirm adobe-source-code-pro-fonts noto-fonts noto-fonts-cjk
 
 echo "[+] Installing Audio firmware"
-pacman -Sy --noconfirm jupiter-main/steamdeck-dsp alsa-ucm-conf noise-suppression-for-voice
+pacman -Sy --noconfirm jupiter-main/steamdeck-dsp alsa-ucm-conf noise-suppression-for-voice caps
 
 echo "[+] Installing Firmware"
 pacman -Sy --noconfirm jupiter-main/jupiter-hw-support \

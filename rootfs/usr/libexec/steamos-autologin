@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+source /etc/default/desktop-wayland
+
 USER=$(id -nu 1000)
 HOME=$(getent passwd $USER | cut -d: -f6)
 
@@ -15,9 +17,12 @@ fi
 
 # Configure autologin if Steam has been updated
 if [[ ! -f ${DESKTOP_AUTOLOGIN} && -f $HOME/.local/share/Steam/ubuntu12_32/steamui.so ]]; then
-  sed -i 's/.*Session=.*/Session=gamescope-wayland.desktop/g' ${SDDM_CONF}
+  sed -i 's/.*Session=.*/Session=gamescope-session.desktop/g' ${SDDM_CONF}
 else
-  sed -i 's/.*Session=.*/Session=plasma.desktop/g' ${SDDM_CONF}
+  if ${DESKTOP_WAYLAND}; then
+    sed -i 's/.*Session=.*/Session=plasma.desktop/g' ${SDDM_CONF}
+  else
+    sed -i 's/.*Session=.*/Session=plasmax11.desktop/g' ${SDDM_CONF}
+  fi
 fi
-
 sed -i 's/.*User=.*/User='${USER}'/g' ${SDDM_CONF}
