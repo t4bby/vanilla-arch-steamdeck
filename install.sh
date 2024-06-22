@@ -23,24 +23,24 @@ EOF
 fi
 
 # Update all packages
-pacman -Syu
+pacman -Syu --noconfirm
 
 echo "[-] Removing Dependecies Conflicts"
 
 # If you have amd-ucode installed, SteamOS already included this on their linux-firmware package
-pacman -Rcns amd-ucode linux-firmware
+pacman -Rcns --noconfirm amd-ucode linux-firmware
 
 echo "[+] Installing SteamOS packages"
 
 # Install base SteamOS packages, cherrypick only the nessesary packages
 echo "[+] Installing Font Requirements"
-pacman -Sy adobe-source-code-pro-fonts noto-fonts noto-fonts-cjk
+pacman -Sy --noconfirm adobe-source-code-pro-fonts noto-fonts noto-fonts-cjk
 
 echo "[+] Installing Audio firmware"
-pacman -Sy jupiter-main/steamdeck-dsp alsa-ucm-conf noise-suppression-for-voice
+pacman -Sy --noconfirm jupiter-main/steamdeck-dsp alsa-ucm-conf noise-suppression-for-voice
 
 echo "[+] Installing Firmware"
-pacman -Sy  jupiter-main/jupiter-hw-support \
+pacman -Sy --noconfirm jupiter-main/jupiter-hw-support \
             jupiter-main/upower jupiter-main/vpower \
             jupiter-main/jupiter-hw-support \
             jupiter-main/linux-firmware-neptune \
@@ -48,13 +48,13 @@ pacman -Sy  jupiter-main/jupiter-hw-support \
             jupiter-main/linux-firmware-neptune-whence
 
 echo "[+] Installing UI dependencies"
-pacman -Sy qt5-tools
+pacman -Sy --noconfirm qt5-tools
 
 echo "[+] Installing Game Utilities"
-pacman -Sy jupiter-main/mangohud gamemode jupiter-main/gamescope jupiter-main/steam-im-modules jupiter-main/steam_notif_daemon jupiter-main/steam-jupiter-stable
+pacman -Sy --noconfirm jupiter-main/mangohud gamemode jupiter-main/gamescope jupiter-main/steam-im-modules jupiter-main/steam_notif_daemon jupiter-main/steam-jupiter-stable
 
 echo "[+] Installing bluetooth" 
-pacman -Sy bluez bluez-plugins bluez-utils 
+pacman -Sy --noconfirm bluez bluez-plugins bluez-utils 
 
 echo "[!] Done installing packages!"
 
@@ -63,6 +63,7 @@ echo "[*] Changing binary permissions"
 
 # Make binary in rootfs executable
 chmod +x ./rootfs/usr/bin/*
+chmod +x ./rootfs/usr/libexec/*
 
 # Copy configurations
 cp -R ./rootfs/* /
@@ -84,18 +85,18 @@ rm /usr/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf
 echo "[*] Enabling Services"
 # Enabling Services
 systemctl enable bluetooth
-systemctl enable steamos-autologin
-systemctl enable wireplumber-workaround
-systemctl enable wireplumber-sysconf
-systemctl enable pipewire-workaround
-systemctl enable pipewire-sysconf
+systemctl enable steamos-autologin.service
+systemctl enable wireplumber-workaround.service
+systemctl enable wireplumber-sysconf.service
+systemctl enable pipewire-workaround.service
+systemctl enable pipewire-sysconf.service
 systemctl --global enable steam-web-debug-portforward.service
 
 echo "[*] Disabling Conflict Services"
-systemctl disable vpower
-systemctl disable jupiter-biosupdate 
-systemctl disable jupiter-controller-update
-systemctl disable jupiter-fan-control
+systemctl disable vpower.service
+systemctl disable jupiter-biosupdate.service
+systemctl disable jupiter-controller-update.service
+systemctl disable jupiter-fan-control.service
 
 echo "[!] Installation Completed"
 echo "[+] You can now reboot to see the changes"
