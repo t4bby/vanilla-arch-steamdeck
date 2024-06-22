@@ -58,6 +58,17 @@ pacman -Sy bluez bluez-plugins bluez-utils
 
 echo "[!] Done installing packages!"
 
+echo "[+] Copying SteamOS configuration"
+echo "[*] Changing binary permissions"
+
+# Make binary in rootfs executable
+chmod +x ./rootfs/usr/bin/*
+
+# Copy configurations
+cp -R ./rootfs/* /
+cp ./rootfs/skel/Desktop/* $HOME/Desktop
+echo "[!] Done copying configurations"
+
 # Linking binaries
 ln -s /usr/bin/steamos-logger /usr/bin/steamos-info
 ln -s /usr/bin/steamos-logger /usr/bin/steamos-notice
@@ -67,7 +78,7 @@ echo "[*] Adding audio workarounds"
 
 # Audio Workaround
 mkdir /usr/lib/firmware/cirrus/
-cp -R /usr/lib/firmware/cs35l41-*.bin /usr/lib/firmware/cirrus/
+cp /usr/lib/firmware/cs35l41-dsp1-spk-*.bin /usr/lib/firmware/cirrus/
 rm /usr/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf
 
 echo "[*] Enabling Services"
@@ -85,17 +96,6 @@ systemctl disable vpower
 systemctl disable jupiter-biosupdate 
 systemctl disable jupiter-controller-update
 systemctl disable jupiter-fan-control
-
-echo "[+] Copying SteamOS configuration"
-echo "[*] Changing binary permissions"
-
-# Make binary in rootfs executable
-chmod +x ./rootfs/usr/bin/*
-
-# Copy configurations
-cp -R ./rootfs/* /
-cp ./rootfs/skel/Desktop/* $HOME/Desktop
-echo "[!] Done copying configurations"
 
 echo "[!] Installation Completed"
 echo "[+] You can now reboot to see the changes"
