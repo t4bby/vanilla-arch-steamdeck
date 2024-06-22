@@ -15,8 +15,8 @@ fi
 
 # Configure autologin if Steam has been updated
 if [[ ! -f ${DESKTOP_AUTOLOGIN} && -f $HOME/.local/share/Steam/ubuntu12_32/steamui.so ]]; then
-  sed -i 's/.*Session=.*/Session=gamescope-session.desktop/g' ${SDDM_CONF}
-else; then
+  sed -i 's/.*Session=.*/Session=gamescope-wayland.desktop/g' ${SDDM_CONF}
+else
   sed -i 's/.*Session=.*/Session=plasma.desktop/g' ${SDDM_CONF}
 fi
 
