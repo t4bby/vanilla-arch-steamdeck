@@ -45,7 +45,8 @@ pacman -Sy --noconfirm jupiter-main/jupiter-hw-support \
             jupiter-main/jupiter-hw-support \
             jupiter-main/linux-firmware-neptune \
             jupiter-main/amd-ucode \
-            jupiter-main/linux-firmware-neptune-whence
+            jupiter-main/linux-firmware-neptune-whence \
+            jupiter-main/jupiter-fan-control
 
 echo "[+] Installing UI dependencies"
 pacman -Sy --noconfirm qt5-tools
